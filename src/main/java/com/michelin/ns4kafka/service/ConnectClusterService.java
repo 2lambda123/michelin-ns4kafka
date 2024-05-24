@@ -18,6 +18,8 @@ import com.michelin.ns4kafka.service.client.connect.KafkaConnectClient;
 import com.michelin.ns4kafka.service.client.connect.entities.ServerInfo;
 import com.michelin.ns4kafka.util.EncryptionUtils;
 import com.michelin.ns4kafka.util.FormatErrorUtils;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.MutableHttpRequest;
@@ -261,9 +263,8 @@ public class ConnectClusterService {
         }
 
         try {
-            MutableHttpRequest<?> request = HttpRequest.GET(new URL(
-                    StringUtils.prependUri(connectCluster.getSpec().getUrl(),
-                        "/connectors?expand=info&expand=status")).toString())
+            MutableHttpRequest<?> request = HttpRequest.GET(Urls.create(StringUtils.prependUri(connectCluster.getSpec().getUrl(),
+                        "/connectors?expand=info&expand=status"), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS).toString())
                 .basicAuth(connectCluster.getSpec().getUsername(), connectCluster.getSpec().getPassword());
 
             Mono<ServerInfo> httpResponse = Mono.from(httpClient.retrieve(request, ServerInfo.class));
