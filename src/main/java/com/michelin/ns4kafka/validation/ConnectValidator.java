@@ -102,7 +102,7 @@ public class ConnectValidator extends ResourceValidator {
             }
         });
 
-        if (connectorType.equals("sink")) {
+        if ("sink".equals(connectorType)) {
             sinkValidationConstraints.forEach((key, value) -> {
                 try {
                     value.ensureValid(key, connector.getSpec().getConfig().get(key));
@@ -112,7 +112,7 @@ public class ConnectValidator extends ResourceValidator {
             });
         }
 
-        if (connectorType.equals("source")) {
+        if ("source".equals(connectorType)) {
             sourceValidationConstraints.forEach((key, value) -> {
                 try {
                     value.ensureValid(key, connector.getSpec().getConfig().get(key));
