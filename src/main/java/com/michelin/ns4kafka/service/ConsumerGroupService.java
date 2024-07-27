@@ -142,7 +142,7 @@ public class ConsumerGroupService {
             applicationContext.getBean(ConsumerGroupAsyncExecutor.class,
                 Qualifiers.byName(namespace.getMetadata().getCluster()));
 
-        if (topic.equals("*")) {
+        if ("*".equals(topic)) {
             return new ArrayList<>(consumerGroupAsyncExecutor.getCommittedOffsets(groupId).keySet());
         } else if (topic.contains(":")) {
             String[] splitResult = topic.split(":");
